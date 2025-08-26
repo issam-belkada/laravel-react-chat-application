@@ -16,21 +16,22 @@ class MessageFactory extends Factory
      */
     public function definition(): array
     {
-        $senderId = $this->faker->randomElement([0, 1]);
-        if ($senderId === 0) {
-
-            $senderId = $this->faker->randomElement(\App\Models\User::where('id','!=','1')->pluck('id')->toArray());
-        } else {
-            $receiverId = $this->faker->randomElement(\App\Models\User::pluck('id')->toArray());
-        }
-
+        $receiverId = null;
         $groupId = null;
+        
         if ($this->faker->boolean(50)) {
+            
             $groupId = $this->faker->randomElement(\App\Models\Group::pluck('id')->toArray());
-        $group= \app\Models\Group::find($groupId);
+            $group = \App\Models\Group::find($groupId);
             $senderId = $this->faker->randomElement($group->users->pluck('id')->toArray());
-            $receiverId = null;
+        } else {
+            
+            $senderId = $this->faker->randomElement(\App\Models\User::pluck('id')->toArray());
+            do {
+                $receiverId = $this->faker->randomElement(\App\Models\User::pluck('id')->toArray());
+            } while ($receiverId == $senderId);
         }
+
 
 
         return [
