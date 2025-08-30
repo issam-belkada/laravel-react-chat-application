@@ -1,5 +1,7 @@
 import { usePage } from "@inertiajs/react";
 import AuthenticatedLayout from "./AuthenticatedLayout";
+import { useEffect } from "react";
+import Echo from "laravel-echo";
 
 const ChatLayout = ({ children }) => {
     const page = usePage();
@@ -8,6 +10,19 @@ const ChatLayout = ({ children }) => {
 
     console.log("Conversations:", conversations);
     console.log("Selected Conversation:", selectedConversation);
+
+    useEffect(() => { 
+        window.Echo.join('online')
+            .here((users) => {
+                console.log('Online users:', users);
+            })
+            .joining((user) => {
+                console.log('User joined:', user);
+            })
+            .leaving((user) => {
+                console.log('User left:', user);
+            });
+    }, []);
 
     return (
         <AuthenticatedLayout>
