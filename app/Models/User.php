@@ -64,7 +64,7 @@ class User extends Authenticatable
             ->leftJoin('conversations', function ($join) use ($userId) {
                 $join->on('conversations.user_id1', '=', 'users.id')
                     ->where('conversations.user_id2', '=', $userId)
-                    ->orWhere(function ($q) use ($userId) {
+                    ->orWhere(function ($Query) use ($userId) {
                         $Query->on('conversations.user_id2', '=', 'users.id')
                             ->where('conversations.user_id1', '=', $userId);
                     });
@@ -76,5 +76,21 @@ class User extends Authenticatable
 
         return $Query->get();
     }
-    
+
+    public function toConversationArray()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'is_group' => false,
+            'is_user' => true,
+            'is_admin' => (bool) $this->is_admin,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+            'blocked_at' => $this->blocked_at,
+            'last_message' => $this->last_message,
+            'last_message_date' => $this->last_message_date,
+        ];
+    }
+
 }
