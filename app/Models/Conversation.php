@@ -26,4 +26,16 @@ class Conversation extends Model
     {
         return $this->belongsTo(User::class, 'user_id2');
     }
+    public static function getConversationsForSidebar($user)
+    {
+        $users = User::getUserExceptUser($user);
+        $groups = Group::getGroupsForUser($user);
+
+        return $users->map(function (User $user)
+        {
+            return $user->toConversationArray($user);
+        })->concat($groups->map(function (Group $group) use ($user) {
+            return $group->toConversationArray($user);
+        }))->sortByDesc('last_message_date')->values();
+    }
 }

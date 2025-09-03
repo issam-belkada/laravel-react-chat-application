@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Middleware;
+use Illuminate\Support\Facades\Auth;
 
+use App\Models\Conversation;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -34,6 +36,7 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'conversations' => Auth::id() ? Conversation::getConversationsForSidebar(Auth::id()) : [],
         ];
     }
 }
