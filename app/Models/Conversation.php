@@ -33,9 +33,9 @@ class Conversation extends Model
 
         return $users->map(function (User $user)
         {
-            return $user->toConversationArray($user);
+            return $user->toConversationArray();
         })->concat($groups->map(function (Group $group) use ($user) {
-            return $group->toConversationArray($user);
+            return $group->toConversationArray();
         }))->sortByDesc('last_message_date')->values();
     }
 }
