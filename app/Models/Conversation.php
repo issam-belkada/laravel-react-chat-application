@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models;
+use App\Models\Group;
+use App\Models\User;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -28,13 +30,13 @@ class Conversation extends Model
     }
     public static function getConversationsForSidebar($user)
     {
-        $users = User::getUserExceptUser($user);
+        $users = User::getUsersExceptUser($user);
         $groups = Group::getGroupsForUser($user);
 
         return $users->map(function (User $user)
         {
             return $user->toConversationArray();
-        })->concat($groups->map(function (Group $group) use ($user) {
+        })->concat($groups->map(function (Group $group) {
             return $group->toConversationArray();
         }))->sortByDesc('last_message_date')->values();
     }
