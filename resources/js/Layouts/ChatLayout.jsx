@@ -2,6 +2,8 @@ import { usePage } from "@inertiajs/react";
 import AuthenticatedLayout from "./AuthenticatedLayout";
 import { useEffect, useState } from "react";
 import Echo from "laravel-echo";
+import { PencilSquareIcon } from "@heroicons/react/24/outline";
+import TextInput from "@/Components/TextInput";
 
 const ChatLayout = ({ children }) => {
     const page = usePage();
@@ -14,6 +16,16 @@ const ChatLayout = ({ children }) => {
 
     console.log("Conversations:", conversations);
     console.log("Selected Conversation:", selectedConversation);
+
+    const onSearch = (ev) => { 
+        const searchTerm = ev.target.value.toLowerCase();
+        setLocalConversations(
+            conversations.filter(conversation => { 
+                return conversation.name.toLowerCase().includes(searchTerm);
+            })
+        )
+    setLocalConversations(filtered);
+    }
 
     useEffect(() => {
         setSortedConversations(
@@ -75,29 +87,43 @@ const ChatLayout = ({ children }) => {
 
     return (
         <AuthenticatedLayout>
-        <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
-            {/* Sidebar */}
-            <aside className="w-64 p-4 bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-                <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Chat App</h2>
-                <nav>
-                    <ul>
-                        <li className="mb-2">
-                            <a href="#" className="text-gray-700 dark:text-gray-300 hover:underline">Chats</a>
-                        </li>
-                        <li className="mb-2">
-                            <a href="#" className="text-gray-700 dark:text-gray-300 hover:underline">Contacts</a>
-                        </li>
-                        <li className="mb-2">
-                            <a href="#" className="text-gray-700 dark:text-gray-300 hover:underline">Settings</a>
-                        </li>
-                    </ul>
-                </nav>
-            </aside>
+            <div className="flex flex-1 w-full overflow-hiden">
+                <div className={`transition-all w-full sm:w-[220px] md:w-[300px] bg-slate-800 flex flex-col overflow-hidden ${selectedConversation ? "-ml-[100%] sm:ml-0" : ""}`} >
+                    <div className="flex items-center justify-between px-3 py-4 text-xl font-medium">
+                        My conversations 
+                        <div className="tooltip tooltip-left" data-tip="Create new Group">
+                            <button className="text-gray-400 hover:text-gray-200">
+                                <PencilSquareIcon className="inline-block w-4 h-4 ml-2">
 
-            {/* Main Content */}
-            <main className="flex-1 p-6 overflow-y-auto">
-                {children}
-            </main>
+                                </PencilSquareIcon>
+                            </button>
+                        </div>
+                    </div>
+                    <div className="p-3">
+                        <TextInput
+                            onKeyUp={onSearch}
+                            placeholder="Search..."
+                            className="w-full"
+                        >
+
+                        </TextInput>
+                    </div>
+                    <div className="flex-1 overflow-auto">
+                        {sortedConversations && sortedConversations.map((conversation) => (
+                            <ConversationItem
+                                key={`${conversation.is_group 
+                                    ?"group_"
+                                    : "user_" }${conversation.id}`}
+                                conversations={conversations}
+                                online={!!isUserOnline(conversation.id)}>
+
+                    </ConversationItem>
+                        ))}
+                    </div>
+  </div>
+                <div className="flex flex-col flex-1 overflow-hiden">
+                    {children}
+                </div>
             </div>
         </AuthenticatedLayout>
     );
