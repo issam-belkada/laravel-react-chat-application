@@ -1,7 +1,7 @@
 import { Link, usePage } from "@inertiajs/react";
-import UserAvatar from "@/Components/UserAvatar.jsx";
-import GroupAvatar from "@/Components/GroupAvatar.jsx";
-import UserOptionsDropdown from "@/Components/UserOptionsDropdown.jsx";
+import UserAvatar from "@/Components/App/UserAvatar.jsx";
+import GroupAvatar from "@/Components/App/GroupAvatar.jsx";
+import UserOptionsDropdown from "@/Components/App/UserOptionsDropdown.jsx";
 
 
 const ConversationItem = ({
@@ -13,17 +13,17 @@ const ConversationItem = ({
     const currentUser = page.props.auth.user;
     let classes = "border-transparent "; 
     if (
-        !selectedConversation.is_group &&
+        !SelectedConversation.is_group &&
         !conversation.is_group &&
-        selectedConversation.id === conversation.id
+        SelectedConversation.id === conversation.id
 
     ) {
         classes = "border-blue-500 bg-black/20";
     }
     else if (
-        selectedConversation.is_group &&
+        SelectedConversation.is_group &&
         conversation.is_group &&
-        selectedConversation.id === conversation.id
+        SelectedConversation.id === conversation.id
     )
     {
         classes = "border-blue-500 bg-black/20";

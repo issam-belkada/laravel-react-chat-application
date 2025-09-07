@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Echo from "laravel-echo";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import TextInput from "@/Components/TextInput";
+import ConversationItem from "@/Components/App/ConversationItem";
+
 
 const ChatLayout = ({ children }) => {
     const page = usePage();
@@ -81,7 +83,7 @@ const ChatLayout = ({ children }) => {
             
             });
         return () => {
-            Echo.leave('online');
+            window.Echo.leave('online');
         };
         }, []);
 
@@ -115,6 +117,7 @@ const ChatLayout = ({ children }) => {
                                     ?"group_"
                                     : "user_" }${conversation.id}`}
                                 conversations={conversations}
+                                SelectedConversation={selectedConversation}
                                 online={!!isUserOnline(conversation.id)}>
 
                     </ConversationItem>
