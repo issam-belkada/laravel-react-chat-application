@@ -1,5 +1,5 @@
 import { Link, usePage } from "@inertiajs/react";
-import UserAvatar.jsx from "@/Components/UserAvatar.jsx";
+import UserAvatar from "@/Components/UserAvatar.jsx";
 import GroupAvatar from "@/Components/GroupAvatar.jsx";
 import UserOptionsDropdown from "@/Components/UserOptionsDropdown.jsx";
 
@@ -83,3 +83,5 @@ const ConversationItem = ({
     </Link >
     );
 };
+
+export default ConversationItem;
